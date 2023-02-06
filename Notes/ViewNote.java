@@ -5,10 +5,11 @@ import java.util.Scanner;
 
 public class ViewNote {
     private final NoteController noteController;
+    private final LoggerInterf loggerInterf;
 
-
-    public ViewNote(NoteController noteController) {
+    public ViewNote(NoteController noteController, LoggerInterf loggerInterf) {
         this.noteController = noteController;
+        this.loggerInterf = loggerInterf;
     }
 
     public void run() {
@@ -18,6 +19,7 @@ public class ViewNote {
             try {
                 String command = prompt("Введите команду: ");
                 com = Commands.valueOf(command.toUpperCase());
+                loggerInterf.save(com);
                 if (com == Commands.EXIT)
                     return;
                 switch (com) {
@@ -28,13 +30,16 @@ public class ViewNote {
                         read();
                         break;
                     case DELETE:
-                        delete(); 
-                        break;  
+                        delete();
+                        break;
                     case UPDATE:
                         update();
                         break;
                     case LIST:
                         list();
+                        break;
+                    case LOG:
+                        log();
                         break;
                     case HELP:
                         showHelp();
@@ -46,6 +51,11 @@ public class ViewNote {
         }
     }
 
+    private void log() throws Exception {
+        for (String item : loggerInterf.read()) {
+            System.out.println(item);
+        }
+    }
 
     private void read() throws Exception {
         String id = prompt("Идентификатор пользователя: ");
@@ -86,7 +96,6 @@ public class ViewNote {
         String date = new Date().toString();
         noteController.saveNote(new Note(title, text, date));
     }
-
 
     private void showHelp() {
         System.out.println("Список команд:");

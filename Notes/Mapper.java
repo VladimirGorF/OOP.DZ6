@@ -1,6 +1,5 @@
 package Notes;
 
-import javax.xml.crypto.Data;
 
 public class Mapper {
     public String map(Note note) {
